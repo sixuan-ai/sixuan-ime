@@ -1,0 +1,104 @@
+/* Every selector is scoped: this stylesheet is loaded globally by Shell. */
+.{{candidate-scope}}.candidate-popup-boxpointer {
+    -arrow-background-color: {{compat-102}};
+    -arrow-border-radius: {{pop-radius}}px;
+    -arrow-border-color: {{compat-103}};
+    -arrow-border-width: 1px;
+    -arrow-rise: 0;
+    -arrow-base: 0;
+    -boxpointer-gap: 6px;
+}
+
+.{{candidate-scope}} .candidate-popup-content {
+    padding: 8px;
+    spacing: 8px;
+    color: {{compat-104}};
+    font-size: {{size}}px;
+    border-radius: {{pop-radius}}px;
+    background-color: transparent;
+    border-width: 0;
+    box-shadow: none;
+}
+
+.{{candidate-scope}} .candidate-popup-text {
+    padding: 2px 10px 0;
+    color: {{compat-105}};
+    font-family: "Ubuntu Sans Mono", monospace;
+    font-size: 12px;
+}
+
+.{{candidate-scope}} .candidate-box {
+    padding: 7px 14px;
+    spacing: 6px;
+    border-radius: {{item-radius}}px;
+    background-color: transparent;
+    color: {{compat-106}};
+    border-width: 0;
+    box-shadow: none;
+}
+
+.{{candidate-scope}} .candidate-box:hover {
+    background-color: {{compat-107}};
+    color: {{compat-108}};
+}
+
+.{{candidate-scope}} .candidate-box:selected {
+    background-color: {{compat-109}};
+    background-gradient-start: {{compat-110}};
+    background-gradient-end: {{compat-111}};
+    background-gradient-direction: vertical;
+    color: {{compat-112}};
+    font-weight: bold;
+    box-shadow: 0 0 {{glow-radius}}px 0 {{compat-113}};
+}
+
+.{{candidate-scope}} .candidate-index {
+    padding: 0;
+    color: {{compat-114}};
+    font-family: "Ubuntu Sans Mono", monospace;
+    font-size: 11px;
+}
+
+.{{candidate-scope}} .candidate-box:selected .candidate-index {
+    color: {{compat-115}};
+}
+
+.{{candidate-scope}} .candidate-page-button-box {
+    spacing: 4px;
+    padding: 4px;
+}
+
+.{{candidate-scope}} .candidate-page-button {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
+    padding: 0;
+    border: 1px solid {{compat-116}};
+    border-radius: 999px;
+    color: {{compat-117}};
+    background-color: {{compat-118}};
+    background-gradient-start: {{compat-119}};
+    background-gradient-end: {{compat-120}};
+    background-gradient-direction: vertical;
+    box-shadow: 3px 3px 6px 0 {{compat-121}};
+}
+
+.{{candidate-scope}} .candidate-page-button:hover {
+    color: {{compat-122}};
+    background-gradient-start: {{compat-123}};
+    background-gradient-end: {{compat-124}};
+}
+
+.{{candidate-scope}} .candidate-page-button:active {
+    box-shadow: inset 2px 2px 4px 0 {{compat-125}};
+}
+
+.{{candidate-scope}} .candidate-page-button:insensitive {
+    color: {{compat-126}};
+    box-shadow: none;
+}
+
+.{{candidate-scope}} .candidate-page-button StIcon {
+    icon-size: 12px;
+}

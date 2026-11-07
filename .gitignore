@@ -1,0 +1,11 @@
+/dist/
+/.cache/
+.env
+.env.*
+*.key
+*.pem
+*.wav
+*.pcm
+*.deb
+/config.json
+/asr-key

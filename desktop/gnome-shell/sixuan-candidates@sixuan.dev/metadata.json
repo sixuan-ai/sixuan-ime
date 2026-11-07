@@ -1,0 +1,7 @@
+{
+  "uuid": "sixuan-candidates@sixuan.dev",
+  "name": "思玄输入法候选窗外观",
+  "description": "仅为思玄拼音候选窗提供圆角胶囊、荧光绿选中项和来源标签。",
+  "shell-version": ["50"],
+  "version": 1
+}
