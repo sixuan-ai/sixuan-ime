@@ -12,7 +12,7 @@ import (
 	"strings"
 )
 
-const releaseVersion = "1.2.4"
+const releaseVersion = "1.2.5"
 
 func configDirectory() string {
 	root := os.Getenv("XDG_CONFIG_HOME")

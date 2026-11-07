@@ -31,7 +31,7 @@ var buildNames = [...]string{
 	"PolyForm-Noncommercial-1.0.0",
 	"思玄输入法",
 	"sixuan-ime",
-	"1.2.4",
+	"1.2.5",
 	"rime.sixuan-ime",
-	"1.2.4",
+	"1.2.5",
 }

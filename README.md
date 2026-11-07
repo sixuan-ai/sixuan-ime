@@ -24,7 +24,7 @@ sudo apt install build-essential pkg-config libgtk-3-dev libibus-1.0-dev \
 make test
 make build
 make deb
-sudo apt install ./dist/sixuan-ime_1.2.4_amd64.deb
+sudo apt install ./dist/sixuan-ime_1.2.5_amd64.deb
 sixuan-ime setup
 ```
 

@@ -2,7 +2,7 @@
 set -euo pipefail
 umask 022
 root=$(cd -- "$(dirname -- "$0")/.." && pwd)
-version=1.2.4
+version=1.2.5
 arch=$(dpkg --print-architecture)
 work=$(mktemp -d)
 trap 'rm -rf "$work"' EXIT
@@ -30,7 +30,7 @@ cat > "$stage/usr/share/ibus/component/sixuan-ime.xml" <<'XML'
   <name>org.freedesktop.IBus.SixuanIME</name>
   <description>思玄输入法</description>
   <exec>/usr/bin/systemctl --user start sixuan-ime.service</exec>
-  <version>1.2.4</version>
+  <version>1.2.5</version>
   <license>PolyForm-Noncommercial-1.0.0</license>
   <author>Shenzhen Sixuan Technology Co., Ltd.</author>
   <engines>
