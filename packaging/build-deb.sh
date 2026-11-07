@@ -10,7 +10,7 @@ stage="$work/package"
 mkdir -p "$root/dist" "$stage/DEBIAN" "$stage/usr/bin" \
   "$stage/usr/lib/systemd/user" "$stage/usr/share/ibus/component" \
   "$stage/usr/share/doc/sixuan-ime" "$stage/usr/share/gnome-shell/extensions"
-go -C "$root" build -trimpath -o "$stage/usr/bin/sixuan-ime" .
+go -C "$root" build -buildvcs=false -trimpath -o "$stage/usr/bin/sixuan-ime" .
 cat > "$stage/usr/lib/systemd/user/sixuan-ime.service" <<'UNIT'
 [Unit]
 Description=Sixuan IME

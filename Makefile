@@ -1,7 +1,7 @@
 .PHONY: build test vet deb
 build:
 	mkdir -p dist
-	go build -trimpath -o dist/sixuan-ime .
+	go build -buildvcs=false -trimpath -o dist/sixuan-ime .
 test:
 	go test ./...
 vet:
