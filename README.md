@@ -14,7 +14,7 @@
 
 ## 构建与安装
 
-当前验证环境为 Ubuntu 26.04 amd64、GNOME 50 / Wayland。其他发行版和桌面环境需要自行适配；候选窗扩展目前声明支持 GNOME 50。
+当前验证环境为 Ubuntu 26.04 amd64、GNOME 50 / Wayland。其他发行版和桌面环境需要自行适配；候选窗扩展目前声明支持 GNOME 50。在 KDE Plasma 等非 GNOME 桌面上，`sixuan-ime setup` 会把“思玄拼音”加入 IBus 引擎列表，并打印候选面板（kimpanel）的配置步骤；候选窗皮肤仅 GNOME 支持。
 
 需要 Go 1.25 或更新版本，以及系统开发依赖：
 

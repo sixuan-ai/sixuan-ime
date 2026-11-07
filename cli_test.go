@@ -144,6 +144,7 @@ func TestPublicInputSourceAppend(t *testing.T) {
 	}
 }
 func TestPublicSetupMocked(t *testing.T) {
+	t.Setenv("XDG_CURRENT_DESKTOP", "GNOME")
 	root := t.TempDir()
 	output, e := os.CreateTemp(root, "setup-output-")
 	if e != nil {

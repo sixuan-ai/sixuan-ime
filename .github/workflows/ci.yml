@@ -15,4 +15,4 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
-      - run: make test vet build deb
+      - run: make test schema-test vet build deb

@@ -281,7 +281,36 @@ void native_text(const char *text, int final) {
   }
 }
 void native_cancel(void) { restore_bridge(0, "已取消输入"); }
+static gboolean schema_exists(const char *id) {
+  GSettingsSchemaSource *source = g_settings_schema_source_get_default();
+  if (!source)
+    return FALSE;
+  GSettingsSchema *schema = g_settings_schema_source_lookup(source, id, TRUE);
+  if (!schema)
+    return FALSE;
+  g_settings_schema_unref(schema);
+  return TRUE;
+}
+static gboolean is_gnome_desktop(void) {
+  const char *desktop = g_getenv("XDG_CURRENT_DESKTOP");
+  gchar **parts = g_strsplit(desktop ? desktop : "", ":", -1);
+  gboolean found = FALSE;
+  for (guint i = 0; parts[i]; i++)
+    if (!g_ascii_strcasecmp(parts[i], "GNOME"))
+      found = TRUE;
+  g_strfreev(parts);
+  return found;
+}
 void native_space(int enabled) {
+  if (!schema_exists("org.gnome.settings-daemon.plugins.media-keys") ||
+      !schema_exists("org.gnome.settings-daemon.plugins.media-keys.custom-keybinding")) {
+    static gboolean warned = FALSE;
+    if (!warned) {
+      g_message("空格结束录音快捷键仅 GNOME 支持");
+      warned = TRUE;
+    }
+    return;
+  }
   if (!space_settings) {
     GSettings *parent =
         g_settings_new("org.gnome.settings-daemon.plugins.media-keys");
@@ -399,12 +428,8 @@ static void disconnected(IBusBus *b, gpointer unused) { native_quit(); }
 // Restarting this service drops its engines and IBus silently falls back to
 // another engine while GNOME still shows Sixuan as current; reselect it.
 static void restore_pinyin(void) {
-  GSettingsSchema *schema = g_settings_schema_source_lookup(
-      g_settings_schema_source_get_default(), "org.gnome.desktop.input-sources",
-      TRUE);
-  if (!schema)
+  if (!schema_exists("org.gnome.desktop.input-sources"))
     return;
-  g_settings_schema_unref(schema);
   GSettings *settings = g_settings_new("org.gnome.desktop.input-sources");
   GVariant *recent = g_settings_get_value(settings, "mru-sources");
   const char *type = NULL, *name = NULL;
@@ -588,26 +613,47 @@ void native_notify(const char *title, const char *body) {
 }
 
 void native_enable_pinyin(int select) {
-  GSettings *settings = g_settings_new("org.gnome.desktop.input-sources");
-  GVariant *existing = g_settings_get_value(settings, "sources");
-  GVariantIter iterator;
-  g_variant_iter_init(&iterator, existing);
-  const char *type, *name;
-  gboolean found = FALSE;
-  GVariantBuilder builder;
-  g_variant_builder_init(&builder, G_VARIANT_TYPE("a(ss)"));
-  while (g_variant_iter_next(&iterator, "(&s&s)", &type, &name)) {
-    g_variant_builder_add(&builder, "(ss)", type, name);
-    if (!strcmp(type, "ibus") && !strcmp(name, NAME_PINYIN))
-      found = TRUE;
+  if (is_gnome_desktop() && schema_exists("org.gnome.desktop.input-sources")) {
+    GSettings *settings = g_settings_new("org.gnome.desktop.input-sources");
+    GVariant *existing = g_settings_get_value(settings, "sources");
+    GVariantIter iterator;
+    g_variant_iter_init(&iterator, existing);
+    const char *type, *name;
+    gboolean found = FALSE;
+    GVariantBuilder builder;
+    g_variant_builder_init(&builder, G_VARIANT_TYPE("a(ss)"));
+    while (g_variant_iter_next(&iterator, "(&s&s)", &type, &name)) {
+      g_variant_builder_add(&builder, "(ss)", type, name);
+      if (!strcmp(type, "ibus") && !strcmp(name, NAME_PINYIN))
+        found = TRUE;
+    }
+    if (!found) {
+      g_variant_builder_add(&builder, "(ss)", "ibus", NAME_PINYIN);
+      g_settings_set_value(settings, "sources", g_variant_builder_end(&builder));
+    } else
+      g_variant_builder_clear(&builder);
+    g_variant_unref(existing);
+    g_object_unref(settings);
+  } else if (schema_exists("org.freedesktop.ibus.general")) {
+    GSettings *settings = g_settings_new("org.freedesktop.ibus.general");
+    gchar **engines = g_settings_get_strv(settings, "preload-engines");
+    guint n = g_strv_length(engines);
+    gboolean found = FALSE;
+    for (guint i = 0; i < n; i++)
+      if (!strcmp(engines[i], NAME_PINYIN))
+        found = TRUE;
+    if (!found) {
+      gchar **updated = g_new0(gchar *, n + 2);
+      for (guint i = 0; i < n; i++)
+        updated[i] = engines[i];
+      updated[n] = (char *)NAME_PINYIN;
+      g_settings_set_strv(settings, "preload-engines",
+                          (const gchar *const *)updated);
+      g_free(updated);
+    }
+    g_strfreev(engines);
+    g_object_unref(settings);
   }
-  if (!found) {
-    g_variant_builder_add(&builder, "(ss)", "ibus", NAME_PINYIN);
-    g_settings_set_value(settings, "sources", g_variant_builder_end(&builder));
-  } else
-    g_variant_builder_clear(&builder);
-  g_variant_unref(existing);
-  g_object_unref(settings);
   g_settings_sync();
   if (select)
     ibus_bus_set_global_engine_async(bus, NAME_PINYIN, 3000, NULL,
